@@ -1,0 +1,64 @@
+- Building sharable components: Storybook
+- Long List Render: react-window or react-paginate
+- Lazy load img: React LazyLoad
+- Multi-Language Support: react-i18next, i18next
+- Styling: styled-components
+- Form Handling: react-hook-form
+- Validation: Yup, Joi, Custom
+
+- So sánh 2 object: Deep Equal
+- Tránh re-render UI từ state trong Redux: Reselect
+
+- React Query được biết đến là thư viện quản lý trạng thái còn thiếu cho React.
+Trong tài liệu của nó, nó nói, "Tìm nạp, bộ nhớ cache và cập nhật dữ liệu trong tất cả các ứng dụng React của bạn mà không cần chạm vào bất kỳ" 
+trạng thái toàn cầu "nào."
+
++ rút gọn khi fetch data (ko cần 1 flag isLoading và sử dung bộ useState để hold data)
++ để handle các vấn đề catching
++ deduping multiple request for the same data
++ updating stale data in the background
++ performance optimize when pagination and lazy loading
+
+1. useQuery(uniqueKey, function() { return a promise })
+- Ko còn sử dụng useState để store data và useEffect
+- Rút gọn chỉ còn: const { isLoading, data } = useQuery('user-key', fetchUser)
+
+2. Query Cache
+- Lần đầu từ Home page sang User page thì cần fetch data user từ api, lúc này có loading Spinner
+- Khi quay trở lại Home page và sang User page 1 lần nữa thì ko còn loading Spinner, data of users are cached (default 5 minutes)
+
++ Nhờ query key để nhận diện được function từ useQuery là unique
++ Khi quay lại page, thì react-query sẽ check data của unique key có tồn tại trong cache
++ Nếu có, cached data sẽ đc return và isLoading ko đc set là true
++ Và react-query biết data có thể đc update nên khi fetch page thì 1 background refetch cũng đc kích hoạt
+chạy bên dưới, và khi success thì data sẽ updated, isFetching là flag cho refetching API
++ set {cacheTime: 5000 } là tham số thứ 3 của useQuery
++ set {staleTime: 30000}: là khoảng thời gian ít nhất để gọi api lần nũa (tránh gọi api nhiều lần tính từ lần đầu)
+
+
+3. onSuccess, onError, select (filter)
+
+
+4. getDetail
+const fetchAPIDetail = heroId => {
+  return axios.get(url)
+}
+
+const useApiDetail = (id) => {
+  return useQuery(['super-hero', id], () => fetchAPIDetail(id))   // cần truyền param nếu ko sẽ call directly
+}
+
+
+5. useMutation
+const addSuperHero = (data) => {
+  return axios.post()
+}
+const useAddSuperHero = () => {
+  return useMutation(addSuperHero)
+}
+
+const { mutate: addHero } = useAddSuperHero
+const handleAdd = () => {
+  const data = {}
+  addHero(data)
+}

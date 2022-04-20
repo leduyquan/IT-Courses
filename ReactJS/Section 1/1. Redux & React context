@@ -1,0 +1,26 @@
+1. Context có 1 số hạn chế
+- Quá phức tạp khi quản lý các state trong application
++ Khi chúng ta tách các state dựa trên các Provider -> nhiều Provider sẽ lồng nhau -> phức tạp
++ Khi sử dụng chung 1 Provider thì quản lý rất nhiều thứ dẫn tới khó để maintain
+- Performance
+
++ Context thường quản lý những state ít change, vì state thường xuyên updated sẽ dẫn tới re-render Provider
+-> re-render all of components into Provider
+
+
+2. How redux work
+- Redux sẽ có 1 central data store
+- Sử dụng những data trong store vào trong components
+- Component sẽ có subscription với store
+- Component sẽ ko trực tiếp mutate data trong store mà thông qua dispatch 1 action
+action sẽ được chuyển tiếp tới reducer và reducer sẽ làm những gì action muốn
+- Có Reducer để quản lý việc mutate data -> sẽ tạo ra new state data (snapshot)
+- Sau đó new data sẽ thay thế state đã tồn tại trong central store
+- Khi data trong store change -> store sẽ thông báo cho components -> components get data and re-render UI
+
+
+3. Reducer function
+- Là 1 pure function: với cùng input thì sẽ trả về kết quả giống nhau, ko mutate data khác (no side effect)
+
+
+

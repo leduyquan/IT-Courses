@@ -1,0 +1,8 @@
+1. useSelector (
+- Thay thế cho connect: đc sử dung trong class components để connect components to the store
+- useSelector khi khai báo trong components sẽ tự động setup 1 subscription to the Redux store
+- useSelector giúp access đến data trong store ngay lập tức, tham số là 1 callback func
+- Sẽ bị thực thi bởi React Redux
+const counter = useSelector(state => state.counter)
+
+- Khi unmount thì redux tự động clear cái subscription (nó quản lý subscription behind the scene)
